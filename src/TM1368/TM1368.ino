@@ -9,7 +9,7 @@ TM1368Contro Panel;
 
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN);
-  Panel.send_int(0);
+  Panel.send_int(69696969);
   Serial.begin(9600);
 }
 
