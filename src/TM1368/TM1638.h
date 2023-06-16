@@ -14,6 +14,7 @@ class TM1368Contro {
     void chip_init(uint8_t clk, uint8_t dio, uint8_t stb);
     void clear_reg();
     void send_int(uint32_t aVal);
+    void send_hex(uint32_t aVal);
 };
 
 
