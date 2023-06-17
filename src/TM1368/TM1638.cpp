@@ -105,8 +105,6 @@ void TM1368Control::send_double(float aVal) {
   uint32_t decimal = (aVal - (uint32_t)aVal) * 100;
   uint8_t len;
 
-  //uint8_t last_addr = 0x0E;
-
   len = convert_numeral(10, decimal);
   last_addr -= 2*len;
   
