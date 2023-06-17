@@ -16,6 +16,7 @@ class TM1368Control {
     void clear_reg();
     void send_int(uint32_t aVal);
     void send_hex(uint32_t aVal);
+    void send_double(float aVal);
 };
 
 const uint8_t bcd_array[] = {

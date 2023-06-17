@@ -7,9 +7,11 @@
 
 TM1368Control Panel;
 
+float a = 666.69;
+
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN);
-  Panel.send_int(666);
+  Panel.send_double(a);
   Serial.begin(9600);
 }
 

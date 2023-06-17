@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "TM1638.h"
 
-//private:
+//public:
 
 void TM1368Control::chip_init(uint8_t clk, uint8_t dio, uint8_t stb) {
   this->CLK_PIN = clk;
@@ -15,6 +15,8 @@ void TM1368Control::chip_init(uint8_t clk, uint8_t dio, uint8_t stb) {
   TM1368Control::clear_reg();
   TM1368Control::send_command(0x8F);
 }
+
+// Private:
 
 void TM1368Control::send_data(uint8_t data) {
   for (uint8_t i = 0; i < 8; ++i) {
@@ -71,7 +73,7 @@ void TM1368Control::send_int(uint32_t aVal) {
   uint32_t num = aVal;
 
   if (aVal == 0){
-    TM1368Control::send_to_address(bcd_array[digit_array[0]], 0x00 );
+    TM1368Control::send_to_address(bcd_array[digit_array[0]], 0x0E );
     return;
   }
 
@@ -87,7 +89,7 @@ void TM1368Control::send_hex(uint32_t aVal) {
   uint32_t num = aVal;
 
   if (aVal == 0){
-    TM1368Control::send_to_address(hex_array[digit_array[0]], 0x00 );
+    TM1368Control::send_to_address(hex_array[digit_array[0]], 0x0E );
     return;
   }
 
@@ -98,3 +100,32 @@ void TM1368Control::send_hex(uint32_t aVal) {
   }
 }
 
+void TM1368Control::send_double(float aVal) {
+  uint32_t int_part = uint32_t(aVal);
+  uint32_t decimal = (aVal - (uint32_t)aVal) * 1000;
+  uint8_t len;
+
+  uint8_t last_addr = 0x0E;
+
+  len = convert_numeral(10, decimal);
+  last_addr -= 2*len;
+  
+
+  for (uint8_t i = len; i > 0; --i) {
+    TM1368Control::send_to_address(bcd_array[digit_array[i-1]], (0x0E - (2*len - 2)) + 2*(len - i));
+  }
+
+  len = convert_numeral(10, int_part);
+
+  if (int_part == 0) {
+    TM1368Control::send_to_address(0b10000000 | bcd_array[0] , last_addr);
+    return;
+  }
+
+
+  for (uint8_t i = len; i > 1; --i) {
+    TM1368Control::send_to_address(bcd_array[digit_array[i-1]], (last_addr - (2*len - 2)) + 2*(len - i));
+  }
+
+  TM1368Control::send_to_address(0b10000000 | bcd_array[digit_array[0]] , last_addr);
+}
