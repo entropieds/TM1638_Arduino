@@ -137,24 +137,27 @@ void TM1368Control::send_char(char aVal) {
 void TM1368Control::send_string(char* aVal) {
   uint8_t j = 0;
   uint8_t decimal_flag = 0;
-  uint8_t decimal_increment = 0;
+  uint8_t decimal_increment = 1;
   for (char* i = aVal; *i > '\0'; ++i) {
     if (*i != '.')
       digit_array[j] = *i - '0';
-    else
+    else {
       digit_array[j] = *i;
+      decimal_increment = 0;
+    }
     ++j;
   }
   
-  for (uint8_t i = 0; i < j + 1; ++i) {
+  j += decimal_increment;
+
+  for (uint8_t i = 0; i < j - decimal_increment; ++i) {
     if (digit_array[i] != 0x2E ) {
-      TM1368Control::send_to_address(bcd_array[digit_array[i]], (0x0E - (2*j -2)) + 2*i - decimal_flag);
+      TM1368Control::send_to_address(bcd_array[digit_array[i]], (0x0E - (2*(j - 1) -2)) + 2*i - decimal_flag);
       //decimal_flag = 0;
     }
     else {
-      TM1368Control::send_to_address(0b10000000 | bcd_array[digit_array[i-1]], (0x0E - (2*j-2)) + 2*i - 2);
+      TM1368Control::send_to_address(0b10000000 | bcd_array[digit_array[i-1]], (0x0E - (2*j-2)) + 2*i);
       decimal_flag = 2;
-      decimal_increment = 1;
     }
   }
 

@@ -11,7 +11,7 @@ float a = 666666.6999;
 
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN);
-  Panel.send_string("7.35");
+  Panel.send_string("7355608");
   Serial.begin(9600);
 }
 
