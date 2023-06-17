@@ -5,11 +5,11 @@
 #define CLK_PIN 3   // Clock pin
 #define STB_PIN 4   // Strobe pin
 
-TM1368Contro Panel;
+TM1368Control Panel;
 
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN);
-  Panel.send_hex(0xAB5C);
+  Panel.send_int(666);
   Serial.begin(9600);
 }
 
