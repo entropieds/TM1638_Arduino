@@ -102,10 +102,10 @@ void TM1368Control::send_hex(uint32_t aVal) {
 
 void TM1368Control::send_double(float aVal) {
   uint32_t int_part = uint32_t(aVal);
-  uint32_t decimal = (aVal - (uint32_t)aVal) * 1000;
+  uint32_t decimal = (aVal - (uint32_t)aVal) * 100;
   uint8_t len;
 
-  uint8_t last_addr = 0x0E;
+  //uint8_t last_addr = 0x0E;
 
   len = convert_numeral(10, decimal);
   last_addr -= 2*len;
@@ -128,4 +128,34 @@ void TM1368Control::send_double(float aVal) {
   }
 
   TM1368Control::send_to_address(0b10000000 | bcd_array[digit_array[0]] , last_addr);
+}
+
+void TM1368Control::send_char(char aVal) {
+  TM1368Control::send_hex(aVal - '0');
+}
+
+void TM1368Control::send_string(char* aVal) {
+  uint8_t j = 0;
+  uint8_t decimal_flag = 0;
+  uint8_t decimal_increment = 0;
+  for (char* i = aVal; *i > '\0'; ++i) {
+    if (*i != '.')
+      digit_array[j] = *i - '0';
+    else
+      digit_array[j] = *i;
+    ++j;
+  }
+  
+  for (uint8_t i = 0; i < j + 1; ++i) {
+    if (digit_array[i] != 0x2E ) {
+      TM1368Control::send_to_address(bcd_array[digit_array[i]], (0x0E - (2*j -2)) + 2*i - decimal_flag);
+      //decimal_flag = 0;
+    }
+    else {
+      TM1368Control::send_to_address(0b10000000 | bcd_array[digit_array[i-1]], (0x0E - (2*j-2)) + 2*i - 2);
+      decimal_flag = 2;
+      decimal_increment = 1;
+    }
+  }
+
 }

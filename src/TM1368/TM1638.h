@@ -6,6 +6,7 @@ class TM1368Control {
     uint8_t CLK_PIN;
     uint8_t DIO_PIN;
     uint8_t STB_PIN;
+    uint8_t last_addr = 0x0E;
     uint8_t digit_array[8];
     void send_data(uint8_t data);
     void send_command(uint8_t command);
@@ -17,6 +18,8 @@ class TM1368Control {
     void send_int(uint32_t aVal);
     void send_hex(uint32_t aVal);
     void send_double(float aVal);
+    void send_char(char aVal);
+    void send_string(char* aVal);
 };
 
 const uint8_t bcd_array[] = {
