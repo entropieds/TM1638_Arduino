@@ -11,7 +11,7 @@ TM1368Control Panel;
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN, BRIGHTNES);
   Panel.send_int(69);  
-  Panel.send_string("56.28.56");
+  Panel.send_string_to_addr("5.6.2.8.5.6",0x04);
   Serial.begin(9600);
 }
 

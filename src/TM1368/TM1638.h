@@ -14,15 +14,22 @@ class TM1368Control {
     uint8_t convert_numeral(uint8_t numeral, uint32_t aVal);
     uint8_t read();
     void inline increment_addr() { last_addr += 0x02; }
+    void inline set_addr(uint8_t addr) {last_addr = addr;}
   public:
     void chip_init(uint8_t clk, uint8_t dio, uint8_t stb, uint8_t brighnest);
     void clear_reg();
-    void send_int(uint32_t aVal,bool dot);
+    void send_int(uint32_t aVal, bool dot);
     void send_int(uint32_t aVal);
     void send_hex(uint32_t aVal);
     void send_double(float aVal);
     void send_char(char aVal);
     void send_string(char* aVal);
+    void send_int_to_addr(uint32_t aVal, uint8_t addr ,bool dot);
+    void send_int_to_addr(uint32_t aVal, uint8_t addr);
+    void send_hex_to_addr(uint32_t aVal, uint8_t addr);
+    void send_double_to_addr(float aVal, uint8_t addr);
+    void send_char_to_addr(char aVal, uint8_t addr);
+    void send_string_to_addr(char* aVal, uint8_t addr);
     void set_led(uint8_t ledVal, uint8_t address);
     uint8_t read_button();
 };

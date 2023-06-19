@@ -197,6 +197,32 @@ void TM1368Control::send_string(char* aVal) {
   last_addr -= decimal_flag;
 }
 
+void TM1368Control::send_int_to_addr(uint32_t aVal, uint8_t addr ,bool dot) {
+ TM1368Control::set_addr(addr);
+ TM1368Control::send_int(aVal, dot);
+}
+void TM1368Control::send_int_to_addr(uint32_t aVal, uint8_t addr) {
+ TM1368Control::set_addr(addr);
+ TM1368Control::send_int(aVal);
+}
+void TM1368Control::send_hex_to_addr(uint32_t aVal, uint8_t addr) {
+ TM1368Control::set_addr(addr);
+ TM1368Control::send_hex(aVal);
+}
+void TM1368Control::send_double_to_addr(float aVal, uint8_t addr) {
+ TM1368Control::set_addr(addr);
+ TM1368Control::send_double(aVal);
+}
+void TM1368Control::send_char_to_addr(char aVal, uint8_t addr) {
+ TM1368Control::set_addr(addr);
+ TM1368Control::send_char(aVal);
+}
+void TM1368Control::send_string_to_addr(char* aVal, uint8_t addr) {
+ TM1368Control::set_addr(addr);
+ TM1368Control::send_string(aVal);
+}
+
+
 void TM1368Control::set_led(uint8_t ledVal, uint8_t address) {
   TM1368Control::send_command(0x44);
   digitalWrite(STB_PIN, LOW);
