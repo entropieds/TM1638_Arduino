@@ -18,7 +18,7 @@ ISR (TIMER1_COMPA_vect) {
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN, BRIGHTNES);
   KeyPad.keypad_init();
-  KeyPad.timer_init();  
+  KeyPad.timer_init();
   Serial.begin(9600);
 }
 
@@ -27,7 +27,7 @@ void loop() {
     flag = false;
     key = KeyPad.get_key();
   cli();
-  if ((key != '\0') && (key != '*') && (key != '#')) 
+  if (key != '\0')
     Panel.send_char(key);
   
   if (key == '*') 

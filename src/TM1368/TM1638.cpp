@@ -111,7 +111,6 @@ void TM1368Control::send_int(uint32_t aVal, bool dot) {
 
 void TM1368Control::send_hex(uint32_t aVal) {
   uint8_t len = 0;
-  uint32_t num = aVal;
 
   if (aVal == 0){
     TM1368Control::send_to_address(hex_array[0], last_addr );
@@ -142,7 +141,21 @@ void TM1368Control::send_double(float aVal) {
 }
 
 void TM1368Control::send_char(char aVal) {
-  TM1368Control::send_hex(aVal - '0');
+
+  if ((aVal >= '0') && (aVal <= '9')) 
+    TM1368Control::send_hex(aVal - '0');
+  else if (aVal == 'A')
+    TM1368Control::send_hex(10);
+  else if (aVal == 'B')
+    TM1368Control::send_hex(11);
+  else if (aVal == 'C')
+    TM1368Control::send_hex(12);
+  else if (aVal == 'D')
+    TM1368Control::send_hex(13);
+  else if (aVal == 'E')
+    TM1368Control::send_hex(14);
+  else if (aVal == 'F')
+    TM1368Control::send_hex(15);
 }
 
 void TM1368Control::send_string(char* aVal) {
