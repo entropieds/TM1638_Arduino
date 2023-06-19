@@ -10,8 +10,8 @@ TM1368Control Panel;
 
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN, BRIGHTNES);
-  Panel.send_hex(6568);
-  Panel.set_led(0, 0x04);
+  Panel.send_int(69);  
+  Panel.send_string("56.28.56");
   Serial.begin(9600);
 }
 
