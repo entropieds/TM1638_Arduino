@@ -18,14 +18,12 @@ class TM1368Control {
   public:
     void chip_init(uint8_t clk, uint8_t dio, uint8_t stb, uint8_t brighnest);
     void clear_reg();
-    void send_int(uint32_t aVal, bool dot);
-    void send_int(uint32_t aVal);
+    void send_int(uint32_t aVal, bool dot = false);
     void send_hex(uint32_t aVal);
     void send_double(float aVal);
     void send_char(char aVal);
     void send_string(char* aVal);
-    void send_int_to_addr(uint32_t aVal, uint8_t addr ,bool dot);
-    void send_int_to_addr(uint32_t aVal, uint8_t addr);
+    void send_int_to_addr(uint32_t aVal, uint8_t addr ,bool dot = false);
     void send_hex_to_addr(uint32_t aVal, uint8_t addr);
     void send_double_to_addr(float aVal, uint8_t addr);
     void send_char_to_addr(char aVal, uint8_t addr);

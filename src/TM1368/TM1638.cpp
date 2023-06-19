@@ -108,28 +108,6 @@ void TM1368Control::send_int(uint32_t aVal, bool dot) {
   TM1368Control::increment_addr();
 }
 
-
-void TM1368Control::send_int(uint32_t aVal) {
-  uint8_t len = 0;
-  uint32_t num = aVal;
-
-  if (aVal == 0){
-    TM1368Control::send_to_address(hex_array[digit_array[0]], last_addr );
-    TM1368Control::increment_addr();
-    return;
-  }
-
-  len = TM1368Control::convert_numeral(10, aVal);
-
-  for (uint8_t i = len; i > 0; --i) {
-    TM1368Control::send_to_address(hex_array[digit_array[i-1]], last_addr);
-    TM1368Control::increment_addr();
-  }
-}
-
-
-
-
 void TM1368Control::send_hex(uint32_t aVal) {
   uint8_t len = 0;
   uint32_t num = aVal;
@@ -158,7 +136,7 @@ void TM1368Control::send_double(float aVal) {
   }
 
   TM1368Control::send_int(int_part, true);
-  TM1368Control::send_int(decimal, false);
+  TM1368Control::send_int(decimal);
   
 }
 
@@ -201,10 +179,7 @@ void TM1368Control::send_int_to_addr(uint32_t aVal, uint8_t addr ,bool dot) {
  TM1368Control::set_addr(addr);
  TM1368Control::send_int(aVal, dot);
 }
-void TM1368Control::send_int_to_addr(uint32_t aVal, uint8_t addr) {
- TM1368Control::set_addr(addr);
- TM1368Control::send_int(aVal);
-}
+
 void TM1368Control::send_hex_to_addr(uint32_t aVal, uint8_t addr) {
  TM1368Control::set_addr(addr);
  TM1368Control::send_hex(aVal);
