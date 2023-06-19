@@ -93,7 +93,7 @@ void TM1368Control::send_int(uint32_t aVal, bool dot) {
 
   if (aVal == 0){
     TM1368Control::send_to_address(hex_array[0], last_addr);
-    TM1368Control::increment_addr();
+    last_addr = TM1368Control::increment_addr(last_addr);
     return;
   }
 
@@ -101,12 +101,12 @@ void TM1368Control::send_int(uint32_t aVal, bool dot) {
 
   for (uint8_t i = len; i > 1; --i) {
     TM1368Control::send_to_address(hex_array[digit_array[i-1]], last_addr);
-    TM1368Control::increment_addr();
+    last_addr = TM1368Control::increment_addr(last_addr);
   }
 
   TM1368Control::send_to_address(hex_array[digit_array[0]] | (dot ? 0b10000000 : 0), last_addr);
 
-  TM1368Control::increment_addr();
+  last_addr = TM1368Control::increment_addr(last_addr);
 }
 
 void TM1368Control::send_hex(uint32_t aVal) {
@@ -114,7 +114,7 @@ void TM1368Control::send_hex(uint32_t aVal) {
 
   if (aVal == 0){
     TM1368Control::send_to_address(hex_array[0], last_addr );
-    TM1368Control::increment_addr();
+    last_addr = TM1368Control::increment_addr(last_addr);
     return;
   }
 
@@ -122,7 +122,7 @@ void TM1368Control::send_hex(uint32_t aVal) {
 
   for (uint8_t i = len; i > 0; --i) {
     TM1368Control::send_to_address(hex_array[digit_array[i-1]], last_addr);
-    TM1368Control::increment_addr();
+    last_addr = TM1368Control::increment_addr(last_addr);
   }
 }
 
@@ -132,7 +132,7 @@ void TM1368Control::send_double(float aVal) {
 
   if (int_part == 0) {
     TM1368Control::send_to_address(0b10000000 | hex_array[0] , last_addr);
-    TM1368Control::increment_addr();
+    last_addr = TM1368Control::increment_addr(last_addr);
   }
 
   TM1368Control::send_int(int_part, true);
@@ -184,7 +184,7 @@ void TM1368Control::send_string(char* aVal) {
       decimal_flag += 2;
       TM1368Control::send_to_address(0b10000000 | hex_array[digit_array[i-1]], last_addr - decimal_flag);
     }
-    TM1368Control::increment_addr(); 
+    last_addr = TM1368Control::increment_addr(last_addr); 
   }
   last_addr -= decimal_flag;
 }
@@ -212,7 +212,7 @@ void TM1368Control::send_string_to_addr(char* aVal, uint8_t addr) {
 }
 
 void TM1368Control::delete_symbol() {
-  TM1368Control::decrement_addr();
+  last_addr = TM1368Control::decrement_addr(last_addr);
   TM1368Control::send_to_address(0x00, last_addr);
 }
 

@@ -51,7 +51,7 @@ char keypadMatrix::get_key() {
 
 void keypadMatrix::debounce(uint8_t pin) {
   uint8_t current_state = digitalRead(pin);
-  uint16_t state_count = 1000;
+  uint16_t state_count = 1800;
   while(state_count != 0){
     uint8_t new_state = digitalRead(pin);
     if (current_state == new_state){

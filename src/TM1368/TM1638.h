@@ -7,14 +7,15 @@ class TM1368Control {
     uint8_t DIO_PIN;
     uint8_t STB_PIN;
     uint8_t last_addr = 0x00;
+    uint8_t last_addr_led = 0x00;
     uint8_t digit_array[8];
     void send_data(uint8_t data);
     void send_command(uint8_t command);
     void send_to_address(uint8_t data, uint8_t address);
     uint8_t convert_numeral(uint8_t numeral, uint32_t aVal);
     uint8_t read();
-    void inline increment_addr() { last_addr += 0x02; }
-    void inline decrement_addr() { last_addr -= 0x02; }
+    uint8_t inline increment_addr(uint8_t addr) {return addr += 0x02; }
+    uint8_t inline decrement_addr(uint8_t addr) {return addr -= 0x02; }
     void inline set_addr(uint8_t addr) {last_addr = addr;}
   public:
     void chip_init(uint8_t clk, uint8_t dio, uint8_t stb, uint8_t brighnest);
