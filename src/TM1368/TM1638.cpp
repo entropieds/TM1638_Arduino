@@ -51,7 +51,7 @@ uint8_t TM1368Control::convert_numeral(uint8_t numeral, uint32_t aVal) {
   }
 
   for (uint8_t i = 0; i < len; ++i) {
-    this->digit_array[i] = aVal % numeral;
+    digit_array[i] = aVal % numeral;
     aVal /= numeral;
   }
   return len;
@@ -84,6 +84,7 @@ void TM1368Control::clear_reg() {
   for(uint8_t i = 0; i < 16; ++i)
     TM1368Control::send_data(0x00);
   digitalWrite(STB_PIN, HIGH);
+  last_addr = 0x00;
 }
 
 void TM1368Control::send_int(uint32_t aVal, bool dot) {
@@ -91,7 +92,7 @@ void TM1368Control::send_int(uint32_t aVal, bool dot) {
   uint32_t num = aVal;
 
   if (aVal == 0){
-    TM1368Control::send_to_address(hex_array[digit_array[0]], last_addr);
+    TM1368Control::send_to_address(hex_array[0], last_addr);
     TM1368Control::increment_addr();
     return;
   }
@@ -113,7 +114,7 @@ void TM1368Control::send_hex(uint32_t aVal) {
   uint32_t num = aVal;
 
   if (aVal == 0){
-    TM1368Control::send_to_address(hex_array[digit_array[0]], last_addr );
+    TM1368Control::send_to_address(hex_array[0], last_addr );
     TM1368Control::increment_addr();
     return;
   }
@@ -197,6 +198,10 @@ void TM1368Control::send_string_to_addr(char* aVal, uint8_t addr) {
  TM1368Control::send_string(aVal);
 }
 
+void TM1368Control::delete_symbol() {
+  TM1368Control::decrement_addr();
+  TM1368Control::send_to_address(0x00, last_addr);
+}
 
 void TM1368Control::set_led(uint8_t ledVal, uint8_t address) {
   TM1368Control::send_command(0x44);
@@ -207,7 +212,12 @@ void TM1368Control::set_led(uint8_t ledVal, uint8_t address) {
 }
 
 uint8_t TM1368Control::read_button() {
-  
-  TM1368Control::send_command(0x42);
-  
+  uint8_t button = 0;
+  digitalWrite(STB_PIN, LOW);
+  TM1368Control::send_data(0x42);
+  for (uint8_t i = 0; i < 4; ++i) {
+    button |= TM1368Control::read() << 1;
+  }
+  digitalWrite(STB_PIN, HIGH);
+  return button;
 }

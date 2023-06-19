@@ -1,5 +1,5 @@
 #include "TM1638.h"
-
+#include "keyboard.h"
 
 #define DIO_PIN 2   // Data pin
 #define CLK_PIN 3   // Clock pin
@@ -7,15 +7,34 @@
 #define BRIGHTNES 0x0C
 
 TM1368Control Panel;
+keypadMatrix KeyPad;
+
+char key = '\0';
+
+ISR (TIMER1_COMPA_vect) {
+  flag = true;
+}
 
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN, BRIGHTNES);
-  Panel.send_double(6.9);  
-  Panel.send_string("5.62.8.8");
+  KeyPad.keypad_init();
+  KeyPad.timer_init();  
   Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  if (flag) {
+    flag = false;
+    key = KeyPad.get_key();
+  cli();
+  if ((key != '\0') && (key != '*') && (key != '#')) 
+    Panel.send_char(key);
+  
+  if (key == '*') 
+    Panel.clear_reg();
+  
+  if (key == '#') 
+    Panel.delete_symbol();
+  sei();
+  }
 }
