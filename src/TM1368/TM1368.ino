@@ -7,9 +7,6 @@
 #define BRIGHTNES 0x0A
 
 TM1368Control Panel;
-keypadMatrix KeyPad;
-
-char key = '\0';
 
 ISR (TIMER1_COMPA_vect) {
   flag = true;
@@ -17,24 +14,11 @@ ISR (TIMER1_COMPA_vect) {
 
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN, BRIGHTNES);
-  KeyPad.keypad_init();
-  KeyPad.timer_init();
+  Panel.send_char('5');
+  Panel.send_symbol_string("UJHLQP9");
   Serial.begin(9600);
 }
 
 void loop() {
-  if (flag) {
-    flag = false;
-    key = KeyPad.get_key();
-  cli();
-  if (key != '\0')
-    Panel.send_char(key);
-  
-  if (key == '*') 
-    Panel.clear_reg();
-  
-  if (key == '#') 
-    Panel.delete_symbol();
-  sei();
-  }
+
 }

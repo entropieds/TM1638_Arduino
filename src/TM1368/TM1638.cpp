@@ -39,6 +39,7 @@ void TM1368Control::send_to_address(uint8_t data, uint8_t address) {
   TM1368Control::send_data(0xC0 | address);
   TM1368Control::send_data(data);
   digitalWrite(STB_PIN, HIGH);
+  last_addr = TM1368Control::increment_addr(last_addr);
 }
 
 uint8_t TM1368Control::convert_numeral(uint8_t numeral, uint32_t aVal) {
@@ -93,7 +94,6 @@ void TM1368Control::send_int(uint32_t aVal, bool dot) {
 
   if (aVal == 0){
     TM1368Control::send_to_address(hex_array[0], last_addr);
-    last_addr = TM1368Control::increment_addr(last_addr);
     return;
   }
 
@@ -101,12 +101,9 @@ void TM1368Control::send_int(uint32_t aVal, bool dot) {
 
   for (uint8_t i = len; i > 1; --i) {
     TM1368Control::send_to_address(hex_array[digit_array[i-1]], last_addr);
-    last_addr = TM1368Control::increment_addr(last_addr);
   }
 
   TM1368Control::send_to_address(hex_array[digit_array[0]] | (dot ? 0b10000000 : 0), last_addr);
-
-  last_addr = TM1368Control::increment_addr(last_addr);
 }
 
 void TM1368Control::send_hex(uint32_t aVal) {
@@ -114,7 +111,6 @@ void TM1368Control::send_hex(uint32_t aVal) {
 
   if (aVal == 0){
     TM1368Control::send_to_address(hex_array[0], last_addr );
-    last_addr = TM1368Control::increment_addr(last_addr);
     return;
   }
 
@@ -122,7 +118,6 @@ void TM1368Control::send_hex(uint32_t aVal) {
 
   for (uint8_t i = len; i > 0; --i) {
     TM1368Control::send_to_address(hex_array[digit_array[i-1]], last_addr);
-    last_addr = TM1368Control::increment_addr(last_addr);
   }
 }
 
@@ -132,7 +127,6 @@ void TM1368Control::send_double(float aVal) {
 
   if (int_part == 0) {
     TM1368Control::send_to_address(0b10000000 | hex_array[0] , last_addr);
-    last_addr = TM1368Control::increment_addr(last_addr);
   }
 
   TM1368Control::send_int(int_part, true);
@@ -141,21 +135,7 @@ void TM1368Control::send_double(float aVal) {
 }
 
 void TM1368Control::send_char(char aVal) {
-
-  if ((aVal >= '0') && (aVal <= '9')) 
-    TM1368Control::send_hex(aVal - '0');
-  else if (aVal == 'A')
-    TM1368Control::send_hex(10);
-  else if (aVal == 'B')
-    TM1368Control::send_hex(11);
-  else if (aVal == 'C')
-    TM1368Control::send_hex(12);
-  else if (aVal == 'D')
-    TM1368Control::send_hex(13);
-  else if (aVal == 'E')
-    TM1368Control::send_hex(14);
-  else if (aVal == 'F')
-    TM1368Control::send_hex(15);
+  TM1368Control::print_symbol(aVal);
 }
 
 void TM1368Control::send_string(char* aVal) {
@@ -184,7 +164,6 @@ void TM1368Control::send_string(char* aVal) {
       decimal_flag += 2;
       TM1368Control::send_to_address(0b10000000 | hex_array[digit_array[i-1]], last_addr - decimal_flag);
     }
-    last_addr = TM1368Control::increment_addr(last_addr); 
   }
   last_addr -= decimal_flag;
 }
@@ -225,12 +204,62 @@ void TM1368Control::set_led(uint8_t ledVal, uint8_t address) {
 }
 
 uint8_t TM1368Control::read_button() {
-  uint8_t button = 0;
+  uint8_t button = 0x00;
   digitalWrite(STB_PIN, LOW);
   TM1368Control::send_data(0x42);
   for (uint8_t i = 0; i < 4; ++i) {
-    button |= TM1368Control::read() << 1;
+    button |= TM1368Control::read() << i;
   }
   digitalWrite(STB_PIN, HIGH);
   return button;
+}
+
+void TM1368Control::print_symbol(char symbol) {
+  switch (symbol){
+    case ('A') :
+      TM1368Control::send_to_address(hex_array[10], last_addr);
+      break;    
+    case ('B') :
+      TM1368Control::send_to_address(hex_array[11], last_addr);  
+      break;
+    case ('C') :
+      TM1368Control::send_to_address(hex_array[12], last_addr);
+      break;      
+    case ('D') :
+      TM1368Control::send_to_address(hex_array[13], last_addr);
+      break;     
+    case ('E') :
+      TM1368Control::send_to_address(hex_array[14], last_addr);
+      break;     
+    case ('F') :
+      TM1368Control::send_to_address(hex_array[15], last_addr);
+      break;     
+    case ('P') :
+      TM1368Control::send_to_address(hex_array[16], last_addr);
+      break;     
+    case ('U') :
+      TM1368Control::send_to_address(hex_array[17], last_addr);
+      break;      
+    case ('L') :
+      TM1368Control::send_to_address(hex_array[18], last_addr);
+      break;     
+    case ('H') :
+      TM1368Control::send_to_address(hex_array[19], last_addr);
+      break;     
+    case ('J') :
+      TM1368Control::send_to_address(hex_array[20], last_addr);
+      break;      
+    case ('Q') :
+      TM1368Control::send_to_address(hex_array[21], last_addr);
+      break;
+    default:
+      TM1368Control::send_to_address(hex_array[symbol - '0'], last_addr);
+      break;     
+  }
+}
+
+void TM1368Control::send_symbol_string(char* aVal) {
+  for (char* i = aVal; *i > '\0'; ++i) {
+    TM1368Control::print_symbol(*i);
+  }
 }

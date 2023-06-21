@@ -32,6 +32,8 @@ class TM1368Control {
     void send_string_to_addr(char* aVal, uint8_t addr);
     void delete_symbol();
     void set_led(uint8_t ledVal, uint8_t address);
+    void print_symbol(char symbol);
+    void send_symbol_string(char* aVal);
     uint8_t read_button();
 };
 
@@ -52,7 +54,13 @@ const uint8_t hex_array[] = {
   0b00111001,  //C
   0b01011110,  //D
   0b01111001,  //E
-  0b01110001   //F
+  0b01110001,  //F
+  0b01110011,  //P
+  0b00111110,  //U
+  0b00111000,  //L
+  0b01110110,  //H
+  0b00011110,  //J
+  0b01100111,  //Q
 };
 
 #endif
