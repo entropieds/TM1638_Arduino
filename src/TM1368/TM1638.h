@@ -6,24 +6,23 @@ class TM1368Control {
     uint8_t CLK_PIN;
     uint8_t DIO_PIN;
     uint8_t STB_PIN;
-    uint8_t last_addr = 0x00;
-    uint8_t last_addr_led = 0x00;
-    uint8_t digit_array[8];
+    uint8_t last_addr = 0x00; // variable to keep last display address
+    uint8_t last_addr_led = 0x00; // variable to keep last led address
+    uint8_t digit_array[8]; // Array to storage invidual digits of numbers
     void send_data(uint8_t data);
     void send_command(uint8_t command);
     void send_to_address(uint8_t data, uint8_t address);
     uint8_t convert_numeral(uint8_t numeral, uint32_t aVal);
     uint8_t read();
-    uint8_t inline increment_addr(uint8_t addr) {return addr += 0x02; }
-    uint8_t inline decrement_addr(uint8_t addr) {return addr -= 0x02; }
-    void inline set_addr(uint8_t addr) {last_addr = addr;}
+    uint8_t inline increment_addr(uint8_t addr) {return addr += 0x02; } // Private methodt to increment address
+    uint8_t inline decrement_addr(uint8_t addr) {return addr -= 0x02; } // Private methodt to dercrement address
+    void inline set_addr(uint8_t addr) {last_addr = addr;}  // Private methodt to set address
   public:
     void chip_init(uint8_t clk, uint8_t dio, uint8_t stb, uint8_t brighnest);
     void clear_reg();
     void send_int(uint32_t aVal, bool dot = false);
     void send_hex(uint32_t aVal);
     void send_double(float aVal);
-    void send_char(char aVal);
     void send_string(char* aVal);
     void send_int_to_addr(uint32_t aVal, uint8_t addr ,bool dot = false);
     void send_hex_to_addr(uint32_t aVal, uint8_t addr);
@@ -36,8 +35,8 @@ class TM1368Control {
     void send_symbol_string(char* aVal);
     uint8_t read_button();
 };
-
-const uint8_t hex_array[] = {
+// Array contains data for 7-segment disp patterns
+const uint8_t symbol_array[] = {
   // gfedcba
   0b00111111,  //0
   0b00000110,  //1

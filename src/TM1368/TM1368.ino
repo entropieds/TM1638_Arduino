@@ -1,5 +1,4 @@
 #include "TM1638.h"
-#include "keyboard.h"
 
 #define DIO_PIN 2   // Data pin
 #define CLK_PIN 3   // Clock pin
@@ -8,17 +7,13 @@
 
 TM1368Control Panel;
 
-ISR (TIMER1_COMPA_vect) {
-  flag = true;
-}
-
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN, BRIGHTNES);
   Panel.send_char('5');
-  Panel.send_symbol_string("UJHLQP9");
+  Panel.send_string("9.5.5.9");
   Serial.begin(9600);
 }
 
 void loop() {
-
+  
 }
