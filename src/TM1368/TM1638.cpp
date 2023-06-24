@@ -76,7 +76,7 @@ void TM1368Control::send_to_address(uint8_t data, uint8_t address) {
   TM1368Control::send_data(0xC0 | address); // Set display addres
   TM1368Control::send_data(data);
   digitalWrite(STB_PIN, HIGH);
-  TM1368Control::increment_addr(&last_addr); // Call method to inceremnt address
+  TM1368Control::increment_addr(last_addr); // Call method to inceremnt address
 }
 
 /******************************************************************/
@@ -356,7 +356,7 @@ void TM1368Control::send_string_to_addr(char* aVal, uint8_t addr) {
 /********************************************************************************************/
 
 void TM1368Control::delete_symbol() {
-  last_addr = TM1368Control::decrement_addr(&last_addr); // Decrement address
+  TM1368Control::decrement_addr(last_addr); // Decrement address
   TM1368Control::send_to_address(0x00, last_addr); // Clear register
 }
 
@@ -375,7 +375,7 @@ void TM1368Control::set_led(uint8_t ledVal, uint8_t address) {
   digitalWrite(STB_PIN, LOW);
   TM1368Control::send_data(0xC1 | address); // Set address of led
   TM1368Control::send_data(ledVal);
-  TM1368Control::increment_addr(&last_addr_led);
+  TM1368Control::increment_addr(last_addr_led);
   digitalWrite(STB_PIN, HIGH);
 }
 

@@ -10,7 +10,7 @@ TM1368Control Panel;
 void setup() {
   Panel.chip_init(CLK_PIN, DIO_PIN, STB_PIN, BRIGHTNES);
   Panel.print_symbol('5');
-  Panel.send_string("9.5.5.9");
+  Panel.send_string("5.9.5.5.9");
   Serial.begin(9600);
 }
 

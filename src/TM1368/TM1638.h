@@ -14,8 +14,8 @@ class TM1368Control {
     void send_to_address(uint8_t data, uint8_t address);
     uint8_t convert_numeral(uint8_t numeral, uint32_t aVal);
     uint8_t read();
-    uint8_t inline increment_addr(uint8_t* addr) {*addr += 0x02; } // Private methodt to increment address
-    uint8_t inline decrement_addr(uint8_t* addr) {*addr -= 0x02; } // Private methodt to dercrement address
+    void inline increment_addr(uint8_t &addr) {addr += 0x02; } // Private methodt to increment address
+    void inline decrement_addr(uint8_t &addr) {addr -= 0x02; } // Private methodt to dercrement address
     void inline set_addr(uint8_t addr) {last_addr = addr;}  // Private methodt to set address
   public:
     void chip_init(uint8_t clk, uint8_t dio, uint8_t stb, uint8_t brighnest);
