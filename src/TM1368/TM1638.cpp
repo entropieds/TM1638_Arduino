@@ -470,3 +470,8 @@ void TM1368Control::send_symbol_string(char* aVal) {
     TM1368Control::print_symbol(*i);
   }
 }
+
+void TM1368Control::send_symbol_string_to_addr(char* aVal, uint8_t addr) {
+ TM1368Control::set_addr(addr);
+ TM1368Control::send_symbol_string(aVal);
+}

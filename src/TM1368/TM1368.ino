@@ -28,10 +28,12 @@ void loop() {
     delete_flag = true;
   }
   
-  if (delete_flag){
+  if (delete_flag) {
     Panel.delete_symbol();
+    address = 0x00;
+    Panel.send_symbol_string_to_addr(txt, address);
   }
-
+  
   Panel.set_led(0, address + 1);
   read_from_serial();
 
@@ -46,7 +48,7 @@ void read_from_serial() {
   uint8_t len = msg.length();
   msg.toCharArray(txt,len + 1);
   txt[len + 1] = '\0';
-  Panel.send_symbol_string(txt);
+  Panel.send_symbol_string_to_addr(txt, address);
   }
 }
 

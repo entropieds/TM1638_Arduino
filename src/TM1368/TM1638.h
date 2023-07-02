@@ -33,6 +33,7 @@ class TM1368Control {
     void set_led(uint8_t ledVal, uint8_t address);
     void print_symbol(char symbol);
     void send_symbol_string(char* aVal);
+    void send_symbol_string_to_addr(char* aVal, uint8_t addr);
     uint8_t read_button();
 };
 // Array contains data for 7-segment disp patterns
