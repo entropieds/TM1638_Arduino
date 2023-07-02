@@ -241,23 +241,23 @@ void TM1368Control::send_double(float aVal) {
 /********************************************************************************************/
 
 void TM1368Control::send_string(char* aVal) {
-  uint8_t j = 0;              // Support variable to get lenght of string
+  uint8_t len = 0;              // Support variable to get lenght of string
   uint8_t decimal_flag = 0;   // Flag to indicate decimal dot.
   uint8_t decimal_increment = 1;  // Variable to compensate lenght of array without decimal dot
 // Get lenght of string and store value.
   for (char* i = aVal; *i > '\0'; ++i) {
     if (*i != '.') // Check if there is decimal dot
-      digit_array[j] = *i - '0';
+      digit_array[len] = *i - '0';
     else {
-      digit_array[j] = 0x2E; // Stroe value of decimal dot
+      digit_array[len] = 0x2E; // Stroe value of decimal dot
       decimal_increment = 0;  
     }
-    ++j; 
+    ++len; 
   }
   
-  j += decimal_increment; // compensate lenght of array without deciaml dot
+  len += decimal_increment; // compensate lenght of array without deciaml dot
 
-  for (uint8_t i = 0; i < j - decimal_increment; ++i) {
+  for (uint8_t i = 0; i < len - decimal_increment; ++i) {
     // Check if there is decimal dot
     if (digit_array[i] != 0x2E ) {
       TM1368Control::send_to_address(symbol_array[digit_array[i]], last_addr - decimal_flag);
@@ -268,6 +268,7 @@ void TM1368Control::send_string(char* aVal) {
     }
   }
   last_addr -= decimal_flag; // Set address to right value
+  
 }
 
 /********************************************************************************************/
